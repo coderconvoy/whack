@@ -3,6 +3,8 @@ package play
 import (
 	"image/color"
 
+	"github.com/coderconvoy/engotil"
+
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
@@ -17,7 +19,7 @@ type BoySystem struct {
 type Boy struct {
 	ecs.BasicEntity
 	DragComponent
-	VelocityComponent
+	engotil.VelocityComponent
 	common.RenderComponent
 	common.SpaceComponent
 	ControlComponent
@@ -27,7 +29,7 @@ func NewBoy(x, y, w float32, pnum int) *Boy {
 	return &Boy{
 		BasicEntity:       ecs.NewBasic(),
 		DragComponent:     DragComponent{w},
-		VelocityComponent: VelocityComponent{friction: 10},
+		VelocityComponent: engotil.VelocityComponent{Friction: 10},
 		RenderComponent: common.RenderComponent{
 			Drawable: common.Triangle{},
 			Color:    color.Black,
@@ -45,7 +47,7 @@ func NewBoy(x, y, w float32, pnum int) *Boy {
 type Ball struct {
 	ecs.BasicEntity
 	DragComponent
-	VelocityComponent
+	engotil.VelocityComponent
 	common.RenderComponent
 	common.SpaceComponent
 }
@@ -54,7 +56,7 @@ func NewBall(x, y, w float32) *Ball {
 	return &Ball{
 		BasicEntity:       ecs.NewBasic(),
 		DragComponent:     DragComponent{w},
-		VelocityComponent: VelocityComponent{friction: 0.1},
+		VelocityComponent: engotil.VelocityComponent{Friction: 0.5},
 		RenderComponent: common.RenderComponent{
 			Drawable: common.Circle{},
 			Color:    color.Black,

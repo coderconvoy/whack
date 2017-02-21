@@ -4,6 +4,7 @@ import (
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
+	"github.com/coderconvoy/engotil"
 )
 
 type DragComponent struct {
@@ -51,7 +52,11 @@ func (ds *DragSystem) Remove(b ecs.BasicEntity) {
 func (ds *DragSystem) Update(d float32) {
 	for _, t := range ds.teathers {
 		aloc := t.a.GetSpaceComponent()
+		acen := engotil.SpaceCenter(*aloc)
+
 		bloc := t.b.GetSpaceComponent()
+		bcen := engotil.SpaceCenter(*bloc)
+
 		adrag := t.a.GetDragComponent()
 		bdrag := t.b.GetDragComponent()
 		d2 := aloc.Position.PointDistance(bloc.Position)
@@ -59,20 +64,20 @@ func (ds *DragSystem) Update(d float32) {
 			continue
 		}
 
-		tension := t.tension // * (d2 - t.length)
+		tension := t.tension * (d2 - t.length)
 		combi := adrag.weight + bdrag.weight
 		if combi == 0 {
 			combi = 0.01
 		}
 		aFrac := tension * d * bdrag.weight / combi
 		t.a.Push(engo.Point{
-			aFrac * (bloc.Position.X - aloc.Position.X),
-			aFrac * (bloc.Position.Y - aloc.Position.Y),
+			aFrac * (bcen.X - acen.X),
+			aFrac * (bcen.Y - acen.Y),
 		})
 		bFrac := tension * d * adrag.weight / combi
 		t.b.Push(engo.Point{
-			bFrac * (aloc.Position.X - bloc.Position.X),
-			bFrac * (aloc.Position.Y - bloc.Position.Y),
+			bFrac * (acen.X - bcen.X),
+			bFrac * (acen.Y - bcen.Y),
 		})
 	}
 }
