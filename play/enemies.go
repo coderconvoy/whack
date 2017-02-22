@@ -1,6 +1,7 @@
 package play
 
 import (
+	"fmt"
 	"image/color"
 
 	"engo.io/ecs"
@@ -14,6 +15,7 @@ type Boxy struct {
 	common.SpaceComponent
 	common.RenderComponent
 	engotil.VelocityComponent
+	common.CollisionComponent
 }
 
 func NewBoxy(x, y float32) *Boxy {
@@ -30,6 +32,10 @@ func NewBoxy(x, y float32) *Boxy {
 		},
 		VelocityComponent: engotil.VelocityComponent{
 			Friction: 2,
+		},
+		CollisionComponent: common.CollisionComponent{
+			Main:  false,
+			Solid: false,
 		},
 	}
 }
@@ -71,18 +77,55 @@ func (bs *BoxSystem) Update(d float32) {
 
 		ncen = engotil.SpaceCenter(*nearest.GetSpaceComponent())
 		if bcen.X > ncen.X {
-			b.Push(engo.Point{-0.4, 0})
+			b.Push(engo.Point{-0.2, 0})
 		}
 		if bcen.X < ncen.X {
-			b.Push(engo.Point{0.4, 0})
+			b.Push(engo.Point{0.2, 0})
 		}
 		if bcen.Y > ncen.Y {
-			b.Push(engo.Point{0, -0.4})
+			b.Push(engo.Point{0, -0.2})
 		}
 		if bcen.Y < ncen.Y {
-			b.Push(engo.Point{0, 0.4})
+			b.Push(engo.Point{0, 0.2})
 		}
 	}
 }
+
 func (bs *BoxSystem) Remove(e ecs.BasicEntity) {
+	bs.targets = engotil.RemoveSpaceable(bs.targets, e)
+
+	bs.boxes = RemoveBoxy(bs.boxes, e)
+}
+
+//Killer
+type HitSystem struct {
+}
+
+func (hs *HitSystem) New(w *ecs.World) {
+	engo.Mailbox.Listen("Collision2Message", func(m engo.Message) {
+		cm, ok := m.(engotil.Collision2Message)
+		if !ok {
+			fmt.Println("Could not Convert Message")
+			return
+		}
+		_, isBall := cm.Main.(*Ball)
+		_, isBoy := cm.Main.(*Boy)
+
+		_, isBox := cm.Buddy.(*Boxy)
+		if isBoy && isBox {
+			fmt.Println("Killing")
+			engo.SetScene(&MainScene{NPlayers: 1}, true)
+		}
+
+		if isBall && isBox {
+			fmt.Println("Removing")
+			w.RemoveEntity(*cm.Buddy.GetBasicEntity())
+
+		}
+
+	})
+
+}
+func (hs *HitSystem) Update(d float32) {}
+func (hs *HitSystem) Remove(e ecs.BasicEntity) {
 }
