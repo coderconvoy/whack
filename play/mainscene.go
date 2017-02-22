@@ -44,7 +44,7 @@ func (ms *MainScene) Setup(w *ecs.World) {
 		sy := 60 + rand.Float32()*280
 
 		a := NewBoy(sx, sy, 10+rand.Float32()*20, i)
-		b := NewBall(sx+rand.Float32()*50, sy+rand.Float32()*50, 2+rand.Float32()*10)
+		b := NewBall(sx+rand.Float32()*50, sy+rand.Float32()*50, 5+rand.Float32()*10)
 		if i < 2 {
 			for _, kc := range a.GetControls() {
 				engo.Input.RegisterButton(kc.S, kc.K)
