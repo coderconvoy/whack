@@ -51,21 +51,17 @@ func (ms *MainScene) Setup(w *ecs.World) {
 		sy := 100 + rand.Float32()*500
 
 		a := NewBoy(sx, sy, 20, i)
-		b := NewBall(sx+rand.Float32()*50, sy+rand.Float32()*50, 10, i)
 		if i < 2 {
 			for _, kc := range a.GetControls() {
 				engo.Input.RegisterButton(kc.S, kc.K)
 			}
 			sList.ControlSys.Add(a)
 		}
-		sList.DragSys.Connect(a, b, 0.1, 70)
 		sList.RenderSys.AddByInterface(a)
-		sList.RenderSys.AddByInterface(b)
 		sList.VelSys.Add(a)
-		sList.VelSys.Add(b)
 		sList.BoxSys.AddTarget(a)
-		sList.CollisionSys.Add(b)
 		sList.CollisionSys.Add(a)
+		AddBall(a, i, 0.1, 70, sList)
 
 	}
 
@@ -78,4 +74,15 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	w.AddSystem(&HitSystem{NPlayers: ms.NPlayers})
 	w.AddSystem(NewSpawnSystem(sList))
 
+}
+
+func AddBall(partner Draggable, pnum int, fric, l float32, sl SysList) *Ball {
+	psc := partner.GetSpaceComponent().Position
+
+	c := NewBall(psc.X+rand.Float32()*l/2, psc.Y+rand.Float32()*l/2, 10, pnum)
+	sl.DragSys.Connect(partner, c, fric, l)
+	sl.RenderSys.AddByInterface(c)
+	sl.VelSys.Add(c)
+	sl.CollisionSys.Add(c)
+	return c
 }
