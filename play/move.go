@@ -16,6 +16,15 @@ type BallSystem struct {
 type BoySystem struct {
 }
 
+func PlayerColor(n int) color.Color {
+	switch n {
+	case 0:
+		return color.RGBA{50, 0, 0, 255}
+	default:
+		return color.RGBA{0, 0, 50, 255}
+	}
+}
+
 type Boy struct {
 	ecs.BasicEntity
 	DragComponent
@@ -33,7 +42,7 @@ func NewBoy(x, y, w float32, pnum int) *Boy {
 		VelocityComponent: engotil.VelocityComponent{Friction: 10},
 		RenderComponent: common.RenderComponent{
 			Drawable: common.Triangle{},
-			Color:    color.Black,
+			Color:    PlayerColor(pnum),
 		},
 		SpaceComponent: common.SpaceComponent{
 			Position: engo.Point{x, y},
@@ -60,14 +69,14 @@ type Ball struct {
 	common.CollisionComponent
 }
 
-func NewBall(x, y, w float32) *Ball {
+func NewBall(x, y, w float32, pnum int) *Ball {
 	res := &Ball{
 		BasicEntity:       ecs.NewBasic(),
 		DragComponent:     DragComponent{w},
 		VelocityComponent: engotil.VelocityComponent{Friction: 0.5},
 		RenderComponent: common.RenderComponent{
 			Drawable: common.Circle{},
-			Color:    color.Black,
+			Color:    PlayerColor(pnum),
 		},
 		SpaceComponent: common.SpaceComponent{
 			Position: engo.Point{x, y},

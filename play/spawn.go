@@ -25,13 +25,13 @@ func (ss *SpawnSystem) Update(d float32) {
 		var b *Boxy
 		switch rand.Intn(4) {
 		case 0:
-			b = NewBoxy(-10, 400)
+			b = NewBoxy(-10, 700)
 		case 1:
 			b = NewBoxy(-10, -10)
 		case 2:
-			b = NewBoxy(600, 400)
+			b = NewBoxy(700, 700)
 		default:
-			b = NewBoxy(600, -10)
+			b = NewBoxy(700, -10)
 
 		}
 

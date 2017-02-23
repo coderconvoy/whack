@@ -33,7 +33,7 @@ func (*MainScene) Preload() {
 }
 
 func (ms *MainScene) Setup(w *ecs.World) {
-	common.SetBackground(color.White)
+	common.SetBackground(color.RGBA{100, 255, 150, 255})
 
 	var sList SysList
 
@@ -47,11 +47,11 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	_ = LoadMap("lev1.tmx", sList)
 
 	for i := 0; i < ms.NPlayers; i++ {
-		sx := 100 + rand.Float32()*400
-		sy := 60 + rand.Float32()*280
+		sx := 100 + rand.Float32()*500
+		sy := 100 + rand.Float32()*500
 
-		a := NewBoy(sx, sy, 10+rand.Float32()*20, i)
-		b := NewBall(sx+rand.Float32()*50, sy+rand.Float32()*50, 5+rand.Float32()*10)
+		a := NewBoy(sx, sy, 20, i)
+		b := NewBall(sx+rand.Float32()*50, sy+rand.Float32()*50, 10, i)
 		if i < 2 {
 			for _, kc := range a.GetControls() {
 				engo.Input.RegisterButton(kc.S, kc.K)

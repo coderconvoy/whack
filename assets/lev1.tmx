@@ -5,12 +5,12 @@
  </tileset>
  <layer name="ground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBgagJFCTE/zWNDwYDNvsIffqHkj1zxcaX2wmDdQ4TdYAQC+bQEx
+   eJxjYBgF1AYsaHiwmTcKRsFgBaN5Z2gBAM5AAEE=
   </data>
  </layer>
  <layer name="sea" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYmBgYBoCmFIwat6oeaPmjZo3VM0brBgAjK0BIQ==
+   eJxjYmBgYKIyphYYNW/UvFHzRs0bNY+65lETAwDifwCZ
   </data>
  </layer>
 </map>
