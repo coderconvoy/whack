@@ -1,6 +1,7 @@
 package play
 
 import (
+	"fmt"
 	"image/color"
 	"math/rand"
 
@@ -25,6 +26,10 @@ type MainScene struct{ NPlayers int }
 func (*MainScene) Type() string { return "MainScene" }
 
 func (*MainScene) Preload() {
+	err := engo.Files.Load("lev1.tmx")
+	if err != nil {
+		fmt.Println("No Load lev1.tmx : ", err)
+	}
 }
 
 func (ms *MainScene) Setup(w *ecs.World) {
@@ -39,7 +44,9 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	sList.BoxSys = &BoxSystem{}
 	sList.CollisionSys = &engotil.CollisionSystem{}
 
-	for i := 0; i < 1; i++ {
+	_ = LoadMap("lev1.tmx", sList)
+
+	for i := 0; i < ms.NPlayers; i++ {
 		sx := 100 + rand.Float32()*400
 		sy := 60 + rand.Float32()*280
 
@@ -68,7 +75,7 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	w.AddSystem(sList.VelSys)
 	w.AddSystem(sList.BoxSys)
 	w.AddSystem(sList.CollisionSys)
-	w.AddSystem(&HitSystem{})
+	w.AddSystem(&HitSystem{NPlayers: ms.NPlayers})
 	w.AddSystem(NewSpawnSystem(sList))
 
 }

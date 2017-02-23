@@ -27,7 +27,7 @@ type Boy struct {
 }
 
 func NewBoy(x, y, w float32, pnum int) *Boy {
-	return &Boy{
+	res := &Boy{
 		BasicEntity:       ecs.NewBasic(),
 		DragComponent:     DragComponent{w},
 		VelocityComponent: engotil.VelocityComponent{Friction: 10},
@@ -46,6 +46,8 @@ func NewBoy(x, y, w float32, pnum int) *Boy {
 			Main:  true,
 		},
 	}
+	res.SetZIndex(5)
+	return res
 
 }
 
@@ -59,7 +61,7 @@ type Ball struct {
 }
 
 func NewBall(x, y, w float32) *Ball {
-	return &Ball{
+	res := &Ball{
 		BasicEntity:       ecs.NewBasic(),
 		DragComponent:     DragComponent{w},
 		VelocityComponent: engotil.VelocityComponent{Friction: 0.5},
@@ -74,7 +76,9 @@ func NewBall(x, y, w float32) *Ball {
 		},
 		CollisionComponent: common.CollisionComponent{
 			Main:  true,
-			Solid: true,
+			Solid: false,
 		},
 	}
+	res.SetZIndex(5)
+	return res
 }

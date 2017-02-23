@@ -99,6 +99,7 @@ func (bs *BoxSystem) Remove(e ecs.BasicEntity) {
 
 //Killer
 type HitSystem struct {
+	NPlayers int
 }
 
 func (hs *HitSystem) New(w *ecs.World) {
@@ -114,7 +115,7 @@ func (hs *HitSystem) New(w *ecs.World) {
 		_, isBox := cm.Buddy.(*Boxy)
 		if isBoy && isBox {
 			fmt.Println("Killing")
-			engo.SetScene(&MainScene{NPlayers: 1}, true)
+			engo.SetScene(&MainScene{NPlayers: hs.NPlayers}, true)
 		}
 
 		if isBall && isBox {

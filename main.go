@@ -11,10 +11,10 @@ func main() {
 	np := flag.Int("np", 1, "np: Number of players")
 	flag.Parse()
 	opts := engo.RunOptions{
-		Title:         "Frogger",
+		Title:         "Whack",
 		ScaleOnResize: true,
-		Width:         600,
-		Height:        400,
+		Width:         700,
+		Height:        700,
 	}
 	engo.Run(opts, &play.MainScene{*np})
 }
