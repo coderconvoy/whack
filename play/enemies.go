@@ -34,8 +34,8 @@ func NewBoxy(x, y float32) *Boxy {
 			Friction: 2,
 		},
 		GCollisionComponent: engotil.GCollisionComponent{
-			Main:  false,
-			Group: engotil.C_GRP3,
+			Main:  C_ENEMY,
+			Group: C_BOY | C_BALL,
 		},
 	}
 }

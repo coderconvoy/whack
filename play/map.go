@@ -36,16 +36,17 @@ func LoadMap(fname string, sl SysList) *common.Level {
 						Height:   tElem.Height() * 0.7,
 					},
 					GCollisionComponent: engotil.GCollisionComponent{
-						Main: false,
+						Main:  0,
+						Extra: engo.Point{8, 8},
 					},
 				}
 				sl.RenderSys.AddByInterface(tile)
 				if tLayer.Name == "sea" {
-					tile.Group = engotil.C_GRP1
+					tile.Group = C_BOY
 					sl.CollisionSys.Add(tile)
 				}
 				if tLayer.Name == "ground" {
-					tile.Group = engotil.C_GRP1 | engotil.C_GRP2
+					tile.Group = C_BOY | C_BALL | C_ENEMY
 					sl.CollisionSys.Add(tile)
 				}
 			}

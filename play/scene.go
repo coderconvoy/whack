@@ -42,7 +42,7 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	sList.VelSys = &engotil.VelocitySystem{}
 	sList.ControlSys = &ControlSystem{}
 	sList.BoxSys = &BoxSystem{}
-	sList.CollisionSys = &engotil.GCollisionSystem{Solids: engotil.C_GRP1 | engotil.C_GRP2}
+	sList.CollisionSys = &engotil.GCollisionSystem{Solids: C_BOY | C_BALL | C_ENEMY}
 
 	_ = LoadMap("lev1.tmx", sList)
 

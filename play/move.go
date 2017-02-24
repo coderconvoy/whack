@@ -10,6 +10,12 @@ import (
 	"engo.io/engo/common"
 )
 
+const (
+	C_BOY = 1 << iota
+	C_BALL
+	C_ENEMY
+)
+
 type BallSystem struct {
 }
 
@@ -51,8 +57,8 @@ func NewBoy(x, y, w float32, pnum int) *Boy {
 		},
 		ControlComponent: GetKeys(pnum),
 		GCollisionComponent: engotil.GCollisionComponent{
-			Group: engotil.C_GRP1 | engotil.C_GRP3,
-			Main:  true,
+			Group: 0,
+			Main:  C_BOY,
 		},
 	}
 	res.SetZIndex(5)
@@ -84,8 +90,8 @@ func NewBall(x, y, w float32, pnum int) *Ball {
 			Height:   w,
 		},
 		GCollisionComponent: engotil.GCollisionComponent{
-			Main:  true,
-			Group: engotil.C_GRP2 | engotil.C_GRP3,
+			Main:  C_BALL,
+			Group: C_BOY,
 		},
 	}
 	res.SetZIndex(5)
