@@ -18,7 +18,7 @@ type SysList struct {
 	VelSys       *engotil.VelocitySystem
 	ControlSys   *ControlSystem
 	BoxSys       *BoxSystem
-	CollisionSys *engotil.CollisionSystem
+	CollisionSys *engotil.GCollisionSystem
 }
 
 type MainScene struct{ NPlayers int }
@@ -42,7 +42,7 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	sList.VelSys = &engotil.VelocitySystem{}
 	sList.ControlSys = &ControlSystem{}
 	sList.BoxSys = &BoxSystem{}
-	sList.CollisionSys = &engotil.CollisionSystem{}
+	sList.CollisionSys = &engotil.GCollisionSystem{Solids: engotil.C_GRP1 | engotil.C_GRP2}
 
 	_ = LoadMap("lev1.tmx", sList)
 

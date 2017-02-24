@@ -3,6 +3,8 @@ package play
 import (
 	"fmt"
 
+	"github.com/coderconvoy/engotil"
+
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
@@ -33,13 +35,17 @@ func LoadMap(fname string, sl SysList) *common.Level {
 						Width:    tElem.Width() * 0.7,
 						Height:   tElem.Height() * 0.7,
 					},
-					CollisionComponent: common.CollisionComponent{
-						Main:  false,
-						Solid: true,
+					GCollisionComponent: engotil.GCollisionComponent{
+						Main: false,
 					},
 				}
 				sl.RenderSys.AddByInterface(tile)
 				if tLayer.Name == "sea" {
+					tile.Group = engotil.C_GRP1
+					sl.CollisionSys.Add(tile)
+				}
+				if tLayer.Name == "ground" {
+					tile.Group = engotil.C_GRP1 | engotil.C_GRP2
 					sl.CollisionSys.Add(tile)
 				}
 			}
@@ -53,5 +59,5 @@ type Tile struct {
 	ecs.BasicEntity
 	common.RenderComponent
 	common.SpaceComponent
-	common.CollisionComponent
+	engotil.GCollisionComponent
 }

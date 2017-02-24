@@ -15,7 +15,7 @@ type Boxy struct {
 	common.SpaceComponent
 	common.RenderComponent
 	engotil.VelocityComponent
-	common.CollisionComponent
+	engotil.GCollisionComponent
 }
 
 func NewBoxy(x, y float32) *Boxy {
@@ -33,9 +33,9 @@ func NewBoxy(x, y float32) *Boxy {
 		VelocityComponent: engotil.VelocityComponent{
 			Friction: 2,
 		},
-		CollisionComponent: common.CollisionComponent{
+		GCollisionComponent: engotil.GCollisionComponent{
 			Main:  false,
-			Solid: false,
+			Group: engotil.C_GRP3,
 		},
 	}
 }
@@ -103,8 +103,8 @@ type HitSystem struct {
 }
 
 func (hs *HitSystem) New(w *ecs.World) {
-	engo.Mailbox.Listen("Collision2Message", func(m engo.Message) {
-		cm, ok := m.(engotil.Collision2Message)
+	engo.Mailbox.Listen("GCollisionMessage", func(m engo.Message) {
+		cm, ok := m.(engotil.GCollisionMessage)
 		if !ok {
 			fmt.Println("Could not Convert Message")
 			return

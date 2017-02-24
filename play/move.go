@@ -31,7 +31,7 @@ type Boy struct {
 	engotil.VelocityComponent
 	common.RenderComponent
 	common.SpaceComponent
-	common.CollisionComponent
+	engotil.GCollisionComponent
 	ControlComponent
 }
 
@@ -50,8 +50,8 @@ func NewBoy(x, y, w float32, pnum int) *Boy {
 			Height:   w,
 		},
 		ControlComponent: GetKeys(pnum),
-		CollisionComponent: common.CollisionComponent{
-			Solid: true,
+		GCollisionComponent: engotil.GCollisionComponent{
+			Group: engotil.C_GRP1 | engotil.C_GRP3,
 			Main:  true,
 		},
 	}
@@ -66,7 +66,7 @@ type Ball struct {
 	engotil.VelocityComponent
 	common.RenderComponent
 	common.SpaceComponent
-	common.CollisionComponent
+	engotil.GCollisionComponent
 }
 
 func NewBall(x, y, w float32, pnum int) *Ball {
@@ -83,9 +83,9 @@ func NewBall(x, y, w float32, pnum int) *Ball {
 			Width:    w,
 			Height:   w,
 		},
-		CollisionComponent: common.CollisionComponent{
+		GCollisionComponent: engotil.GCollisionComponent{
 			Main:  true,
-			Solid: false,
+			Group: engotil.C_GRP2 | engotil.C_GRP3,
 		},
 	}
 	res.SetZIndex(5)
