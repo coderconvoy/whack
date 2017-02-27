@@ -2,12 +2,12 @@ package play
 
 import (
 	"fmt"
-	"image/color"
 
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
 	"github.com/coderconvoy/engotil"
+	"github.com/coderconvoy/engotil/engopoint"
 )
 
 type Boxy struct {
@@ -16,19 +16,19 @@ type Boxy struct {
 	common.RenderComponent
 	engotil.VelocityComponent
 	engotil.GCollisionComponent
+	ss *common.Spritesheet
 }
 
-func NewBoxy(x, y float32) *Boxy {
+func NewBoxy(x, y float32, sheet *common.Spritesheet) *Boxy {
 	return &Boxy{
 		BasicEntity: ecs.NewBasic(),
 		SpaceComponent: common.SpaceComponent{
 			Position: engo.Point{x, y},
-			Width:    30,
-			Height:   30,
+			Width:    40,
+			Height:   40,
 		},
 		RenderComponent: common.RenderComponent{
-			Drawable: common.Rectangle{},
-			Color:    color.Black,
+			Drawable: sheet.Cell(0),
 		},
 		VelocityComponent: engotil.VelocityComponent{
 			Friction: 2,
@@ -36,7 +36,9 @@ func NewBoxy(x, y float32) *Boxy {
 		GCollisionComponent: engotil.GCollisionComponent{
 			Main:  C_ENEMY,
 			Group: C_BOY | C_BALL,
+			Extra: engo.Point{-20, -20},
 		},
+		ss: sheet,
 	}
 }
 
@@ -88,6 +90,12 @@ func (bs *BoxSystem) Update(d float32) {
 		if bcen.Y < ncen.Y {
 			b.Push(engo.Point{0, 0.1})
 		}
+
+		vc := b.GetVelocityComponent()
+		a := engopoint.Angle8(vc.Point)
+		rc := b.GetRenderComponent()
+		rc.Drawable = b.ss.Cell(a)
+
 	}
 }
 

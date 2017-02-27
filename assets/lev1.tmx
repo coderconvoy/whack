@@ -5,7 +5,7 @@
  </tileset>
  <layer name="ground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBgF1AYsaHiwmTcKRsFgBaN5Z2gBAM5AAEE=
+   eJxjYBgF1ASsSJidCuZxAjEXFHNTwbxRMAoGMxjNP0MLAACE9wB9
   </data>
  </layer>
  <layer name="sea" width="20" height="20">

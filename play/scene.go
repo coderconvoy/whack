@@ -30,6 +30,11 @@ func (*MainScene) Preload() {
 	if err != nil {
 		fmt.Println("No Load lev1.tmx : ", err)
 	}
+	err = engo.Files.Load("rat.png")
+	if err != nil {
+		fmt.Println("No rat.png")
+
+	}
 }
 
 func (ms *MainScene) Setup(w *ecs.World) {

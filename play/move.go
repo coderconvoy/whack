@@ -57,7 +57,7 @@ func NewBoy(x, y, w float32, pnum int) *Boy {
 		},
 		ControlComponent: GetKeys(pnum),
 		GCollisionComponent: engotil.GCollisionComponent{
-			Group: 0,
+			Group: C_BALL,
 			Main:  C_BOY,
 		},
 	}
@@ -91,7 +91,7 @@ func NewBall(x, y, w float32, pnum int) *Ball {
 		},
 		GCollisionComponent: engotil.GCollisionComponent{
 			Main:  C_BALL,
-			Group: C_BOY,
+			Group: 0,
 		},
 	}
 	res.SetZIndex(5)

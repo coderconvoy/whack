@@ -1,4 +1,6 @@
 *.swp
 assets/*.png
 assets/*.xcf
+*.js
+whack
 
