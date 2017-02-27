@@ -16,10 +16,11 @@ type Boxy struct {
 	common.RenderComponent
 	engotil.VelocityComponent
 	engotil.GCollisionComponent
-	ss *common.Spritesheet
+	ss  *common.Spritesheet
+	acc float32
 }
 
-func NewBoxy(x, y float32, sheet *common.Spritesheet) *Boxy {
+func NewBoxy(lev int, x, y float32, sheet *common.Spritesheet) *Boxy {
 	return &Boxy{
 		BasicEntity: ecs.NewBasic(),
 		SpaceComponent: common.SpaceComponent{
@@ -36,9 +37,10 @@ func NewBoxy(x, y float32, sheet *common.Spritesheet) *Boxy {
 		GCollisionComponent: engotil.GCollisionComponent{
 			Main:  C_ENEMY,
 			Group: C_BOY | C_BALL,
-			Extra: engo.Point{-20, -20},
+			Extra: engo.Point{-10, -10},
 		},
-		ss: sheet,
+		acc: float32(lev+3) * 0.05,
+		ss:  sheet,
 	}
 }
 
@@ -79,16 +81,16 @@ func (bs *BoxSystem) Update(d float32) {
 
 		ncen = engotil.SpaceCenter(*nearest.GetSpaceComponent())
 		if bcen.X > ncen.X {
-			b.Push(engo.Point{-0.1, 0})
+			b.Push(engo.Point{-b.acc, 0})
 		}
 		if bcen.X < ncen.X {
-			b.Push(engo.Point{0.1, 0})
+			b.Push(engo.Point{b.acc, 0})
 		}
 		if bcen.Y > ncen.Y {
-			b.Push(engo.Point{0, -0.1})
+			b.Push(engo.Point{0, -b.acc})
 		}
 		if bcen.Y < ncen.Y {
-			b.Push(engo.Point{0, 0.1})
+			b.Push(engo.Point{0, b.acc})
 		}
 
 		vc := b.GetVelocityComponent()

@@ -11,30 +11,34 @@ type SpawnSystem struct {
 	S     SysList
 	Delay float32
 	since float32
-	rats  *common.Spritesheet
+	rats  []*common.Spritesheet
 }
 
 func NewSpawnSystem(sl SysList) *SpawnSystem {
 	return &SpawnSystem{
 		S:     sl,
 		Delay: 3,
-		rats:  common.NewSpritesheetFromFile("rat.png", 40, 40),
+		rats: []*common.Spritesheet{
+			common.NewSpritesheetFromFile("rat.png", 40, 40),
+			common.NewSpritesheetFromFile("rat2.png", 40, 40),
+		},
 	}
 }
 
 func (ss *SpawnSystem) Update(d float32) {
 	ss.since += d
+	n := rand.Intn(2)
 	if ss.since > ss.Delay {
 		var b *Boxy
 		switch rand.Intn(4) {
 		case 0:
-			b = NewBoxy(-10, 700, ss.rats)
+			b = NewBoxy(n, -10, 700, ss.rats[n])
 		case 1:
-			b = NewBoxy(-10, -10, ss.rats)
+			b = NewBoxy(n, -10, -10, ss.rats[n])
 		case 2:
-			b = NewBoxy(700, 700, ss.rats)
+			b = NewBoxy(n, 700, 700, ss.rats[n])
 		default:
-			b = NewBoxy(700, -10, ss.rats)
+			b = NewBoxy(n, 700, -10, ss.rats[n])
 
 		}
 

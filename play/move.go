@@ -57,6 +57,7 @@ func NewBoy(x, y, w float32, pnum int) *Boy {
 		},
 		ControlComponent: GetKeys(pnum),
 		GCollisionComponent: engotil.GCollisionComponent{
+			Extra: engo.Point{-10, -10},
 			Group: C_BALL,
 			Main:  C_BOY,
 		},
@@ -90,6 +91,7 @@ func NewBall(x, y, w float32, pnum int) *Ball {
 			Height:   w,
 		},
 		GCollisionComponent: engotil.GCollisionComponent{
+			Extra: engo.Point{0, 0},
 			Main:  C_BALL,
 			Group: 0,
 		},
