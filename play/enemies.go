@@ -77,16 +77,16 @@ func (bs *BoxSystem) Update(d float32) {
 
 		ncen = engotil.SpaceCenter(*nearest.GetSpaceComponent())
 		if bcen.X > ncen.X {
-			b.Push(engo.Point{-0.2, 0})
+			b.Push(engo.Point{-0.1, 0})
 		}
 		if bcen.X < ncen.X {
-			b.Push(engo.Point{0.2, 0})
+			b.Push(engo.Point{0.1, 0})
 		}
 		if bcen.Y > ncen.Y {
-			b.Push(engo.Point{0, -0.2})
+			b.Push(engo.Point{0, -0.1})
 		}
 		if bcen.Y < ncen.Y {
-			b.Push(engo.Point{0, 0.2})
+			b.Push(engo.Point{0, 0.1})
 		}
 	}
 }

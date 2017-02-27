@@ -37,7 +37,7 @@ func LoadMap(fname string, sl SysList) *common.Level {
 					},
 					GCollisionComponent: engotil.GCollisionComponent{
 						Main:  0,
-						Extra: engo.Point{8, 8},
+						Extra: engo.Point{0, 0},
 					},
 				}
 				sl.RenderSys.AddByInterface(tile)
