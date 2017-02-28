@@ -56,6 +56,7 @@ func (bs *BoxSystem) AddTarget(t engotil.Spaceable) {
 func (bs *BoxSystem) AddBox(b *Boxy) {
 	bs.boxes = append(bs.boxes, b)
 }
+
 func (bs *BoxSystem) Update(d float32) {
 	if len(bs.targets) == 0 {
 		return
