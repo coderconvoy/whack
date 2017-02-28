@@ -19,6 +19,7 @@ type SysList struct {
 	ControlSys   *ControlSystem
 	BoxSys       *BoxSystem
 	CollisionSys *engotil.GCollisionSystem
+	LookSys      *LookSystem
 }
 
 type MainScene struct{ NPlayers int }
@@ -30,9 +31,9 @@ func (*MainScene) Preload() {
 	if err != nil {
 		fmt.Println("No Load lev1.tmx : ", err)
 	}
-	err = engo.Files.Load("rat.png", "rat2.png")
+	err = engo.Files.Load("rat.png", "rat2.png", "boy1.png", "boy2.png")
 	if err != nil {
-		fmt.Println("No rat.png")
+		fmt.Println("could not load images:", err)
 
 	}
 }
@@ -48,6 +49,7 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	sList.ControlSys = &ControlSystem{}
 	sList.BoxSys = &BoxSystem{}
 	sList.CollisionSys = &engotil.GCollisionSystem{Solids: C_BOY | C_BALL | C_ENEMY}
+	sList.LookSys = &LookSystem{}
 
 	_ = LoadMap("lev1.tmx", sList)
 
@@ -66,7 +68,8 @@ func (ms *MainScene) Setup(w *ecs.World) {
 		sList.VelSys.Add(a)
 		sList.BoxSys.AddTarget(a)
 		sList.CollisionSys.Add(a)
-		AddBall(a, i, 0.1, 70, sList)
+		b := AddBall(a, i, 0.1, 70, sList)
+		sList.LookSys.Connect(a, b)
 
 	}
 
@@ -75,6 +78,7 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	w.AddSystem(sList.DragSys)
 	w.AddSystem(sList.VelSys)
 	w.AddSystem(sList.BoxSys)
+	w.AddSystem(sList.LookSys)
 	w.AddSystem(sList.CollisionSys)
 	w.AddSystem(&HitSystem{NPlayers: ms.NPlayers})
 	w.AddSystem(NewSpawnSystem(sList))

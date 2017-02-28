@@ -1,6 +1,7 @@
 package play
 
 import (
+	"fmt"
 	"image/color"
 
 	"github.com/coderconvoy/engotil"
@@ -39,16 +40,18 @@ type Boy struct {
 	common.SpaceComponent
 	engotil.GCollisionComponent
 	ControlComponent
+	ss *common.Spritesheet
 }
 
 func NewBoy(x, y, w float32, pnum int) *Boy {
+	pfile := fmt.Sprintf("boy%d.png", pnum+1)
+	ss := common.NewSpritesheetFromFile(pfile, 40, 40)
 	res := &Boy{
 		BasicEntity:       ecs.NewBasic(),
 		DragComponent:     DragComponent{w},
 		VelocityComponent: engotil.VelocityComponent{Friction: 10},
 		RenderComponent: common.RenderComponent{
-			Drawable: common.Triangle{},
-			Color:    PlayerColor(pnum),
+			Drawable: ss.Cell(0),
 		},
 		SpaceComponent: common.SpaceComponent{
 			Position: engo.Point{x, y},
@@ -61,9 +64,15 @@ func NewBoy(x, y, w float32, pnum int) *Boy {
 			Group: C_BALL,
 			Main:  C_BOY,
 		},
+		ss: ss,
 	}
 	res.SetZIndex(5)
 	return res
+
+}
+
+func (b *Boy) LookAngle(n int) {
+	b.RenderComponent.Drawable = b.ss.Cell(n)
 
 }
 

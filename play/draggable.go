@@ -59,7 +59,7 @@ func (ds *DragSystem) Update(d float32) {
 
 		adrag := t.a.GetDragComponent()
 		bdrag := t.b.GetDragComponent()
-		d2 := aloc.Position.PointDistance(bloc.Position)
+		d2 := acen.PointDistance(bcen)
 		if d2 < t.length {
 			continue
 		}
