@@ -27,7 +27,12 @@ type MainScene struct{ NPlayers int }
 func (*MainScene) Type() string { return "MainScene" }
 
 func (*MainScene) Preload() {
-	err := engo.Files.Load("lev1.tmx")
+	err := engo.Files.Load("Targa.ttf")
+	if err != nil {
+		fmt.Println("No Load Targa.ttf:", err)
+	}
+
+	err = engo.Files.Load("lev1.tmx")
 	if err != nil {
 		fmt.Println("No Load lev1.tmx : ", err)
 	}
@@ -73,6 +78,17 @@ func (ms *MainScene) Setup(w *ecs.World) {
 
 	}
 
+	fnt := &common.Font{
+		URL:  "Targa.ttf",
+		FG:   color.Black,
+		Size: 36,
+	}
+
+	err := fnt.CreatePreloaded()
+	if err != nil {
+		fmt.Println("Could not Preload font", err)
+	}
+
 	w.AddSystem(sList.RenderSys)
 	w.AddSystem(sList.ControlSys)
 	w.AddSystem(sList.DragSys)
@@ -81,6 +97,7 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	w.AddSystem(sList.LookSys)
 	w.AddSystem(sList.CollisionSys)
 	w.AddSystem(&HitSystem{NPlayers: ms.NPlayers})
+	w.AddSystem(NewHudSystem(ms.NPlayers, sList.RenderSys, fnt))
 	w.AddSystem(NewSpawnSystem(sList))
 
 }
