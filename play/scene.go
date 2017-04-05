@@ -20,6 +20,7 @@ type SysList struct {
 	BoxSys       *BoxSystem
 	CollisionSys *engotil.GCollisionSystem
 	LookSys      *LookSystem
+	HudSys       *HudSystem
 }
 
 type MainScene struct{ NPlayers int }
@@ -46,6 +47,16 @@ func (*MainScene) Preload() {
 func (ms *MainScene) Setup(w *ecs.World) {
 	common.SetBackground(color.RGBA{100, 255, 150, 255})
 
+	fnt := &common.Font{
+		URL:  "Targa.ttf",
+		FG:   color.Black,
+		Size: 36,
+	}
+
+	err := fnt.CreatePreloaded()
+	if err != nil {
+		fmt.Println("Could not Preload font", err)
+	}
 	var sList SysList
 
 	sList.RenderSys = &common.RenderSystem{}
@@ -53,8 +64,9 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	sList.VelSys = &engotil.VelocitySystem{}
 	sList.ControlSys = &ControlSystem{}
 	sList.BoxSys = &BoxSystem{}
-	sList.CollisionSys = &engotil.GCollisionSystem{Solids: C_BOY | C_BALL | C_ENEMY}
+	sList.CollisionSys = &engotil.GCollisionSystem{Solids: C_BOY_SOLID | C_MOVING_SOLID}
 	sList.LookSys = &LookSystem{}
+	sList.HudSys = NewHudSystem(sList.RenderSys, fnt)
 
 	_ = LoadMap("lev1.tmx", sList)
 
@@ -73,20 +85,10 @@ func (ms *MainScene) Setup(w *ecs.World) {
 		sList.VelSys.Add(a)
 		sList.BoxSys.AddTarget(a)
 		sList.CollisionSys.Add(a)
+		sList.HudSys.AddPlayer(a)
 		b := AddBall(a, i, 0.1, 70, sList)
 		sList.LookSys.Connect(a, b)
 
-	}
-
-	fnt := &common.Font{
-		URL:  "Targa.ttf",
-		FG:   color.Black,
-		Size: 36,
-	}
-
-	err := fnt.CreatePreloaded()
-	if err != nil {
-		fmt.Println("Could not Preload font", err)
 	}
 
 	w.AddSystem(sList.RenderSys)
@@ -96,8 +98,8 @@ func (ms *MainScene) Setup(w *ecs.World) {
 	w.AddSystem(sList.BoxSys)
 	w.AddSystem(sList.LookSys)
 	w.AddSystem(sList.CollisionSys)
+	w.AddSystem(sList.HudSys)
 	w.AddSystem(&HitSystem{NPlayers: ms.NPlayers})
-	w.AddSystem(NewHudSystem(ms.NPlayers, sList.RenderSys, fnt))
 	w.AddSystem(NewSpawnSystem(sList))
 
 }

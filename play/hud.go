@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"image/color"
 
+	"github.com/coderconvoy/engotil"
+
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
@@ -53,52 +55,74 @@ type SetNumer interface {
 	SetNum(int)
 }
 
-type Player struct {
+type ScoreComponent struct {
 	Health, Score int
 	Hdisp, Sdisp  SetNumer
 }
 
 type HudSystem struct {
-	RS      *common.RenderSystem
-	Players []*Player
+	RS     *common.RenderSystem
+	fnt    *common.Font
+	Scores []*ScoreComponent
 }
 
-func NewHudSystem(np int, rs *common.RenderSystem, fnt *common.Font) *HudSystem {
-
-	players := []*Player{}
-	for i := 0; i < np; i++ {
-		hDisp := NewTextEntity("H:",
-			common.SpaceComponent{Position: engo.Point{float32(i * 40), 0}},
-			fnt)
-		sDisp := NewTextEntity("S:",
-			common.SpaceComponent{Position: engo.Point{float32(i * 40), 40}},
-			fnt)
-		rs.AddByInterface(hDisp)
-		rs.AddByInterface(sDisp)
-
-		players = append(players, &Player{
-			Health: 5,
-			Score:  0,
-			Hdisp:  hDisp,
-			Sdisp:  sDisp,
-		})
-	}
+func NewHudSystem(rs *common.RenderSystem, fnt *common.Font) *HudSystem {
+	Scores := []*ScoreComponent{}
 
 	return &HudSystem{
-		RS:      rs,
-		Players: players,
+		RS:     rs,
+		fnt:    fnt,
+		Scores: Scores,
 	}
+}
+
+func (hs *HudSystem) AddPlayer(pl *Boy) {
+	i := len(hs.Scores) + 1
+	hDisp := NewTextEntity("H:",
+		common.SpaceComponent{Position: engo.Point{float32(i * 40), 0}},
+		hs.fnt)
+	hDisp.SetNum(5)
+	sDisp := NewTextEntity("S:",
+		common.SpaceComponent{Position: engo.Point{float32(i * 40), 40}},
+		hs.fnt)
+	hs.RS.AddByInterface(hDisp)
+	hs.RS.AddByInterface(sDisp)
+
+	res := &ScoreComponent{
+		Health: 5,
+		Score:  0,
+		Hdisp:  hDisp,
+		Sdisp:  sDisp,
+	}
+	hs.Scores = append(hs.Scores, res)
+	pl.ScoreComponent = res
 
 }
 
 func (hs *HudSystem) New(w *ecs.World) {
+	engo.Mailbox.Listen("GCollisionMessage", func(m engo.Message) {
+		mes, ok := m.(engotil.GCollisionMessage)
+		if !ok {
+			return
+		}
+
+		if mes.Group&C_BOY_HURT > 0 {
+			b, ok := mes.Main.(*Boy)
+			if !ok {
+				return
+			}
+			b.Health--
+			b.Hdisp.SetNum(b.Health)
+			if b.Health == 0 {
+				fmt.Println("Death")
+				engo.SetScene(&MainScene{NPlayers: len(hs.Scores)}, true)
+			}
+		}
+
+	})
 }
 
 func (hs *HudSystem) Update(d float32) {
-	for _, p := range hs.Players {
-		p.Score++
-		p.Hdisp.SetNum(p.Score)
-	}
 
 }
 

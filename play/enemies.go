@@ -35,8 +35,8 @@ func NewBoxy(lev int, x, y float32, sheet *common.Spritesheet) *Boxy {
 			Friction: 2,
 		},
 		GCollisionComponent: engotil.GCollisionComponent{
-			Main:  C_ENEMY,
-			Group: C_BOY | C_BALL,
+			Main:  C_MOVING_SOLID,
+			Group: C_BOY_HURT | C_BALL_HIT,
 			Extra: engo.Point{-10, -10},
 		},
 		acc: float32(lev+3) * 0.05,
@@ -126,7 +126,6 @@ func (hs *HitSystem) New(w *ecs.World) {
 		_, isBox := cm.Buddy.(*Boxy)
 		if isBoy && isBox {
 			fmt.Println("Killing")
-			engo.SetScene(&MainScene{NPlayers: hs.NPlayers}, true)
 		}
 
 		if isBall && isBox {

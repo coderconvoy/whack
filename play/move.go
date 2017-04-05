@@ -12,9 +12,10 @@ import (
 )
 
 const (
-	C_BOY = 1 << iota
-	C_BALL
-	C_ENEMY
+	C_BOY_HURT = 1 << iota
+	C_BOY_SOLID
+	C_BALL_HIT
+	C_MOVING_SOLID
 )
 
 type BallSystem struct {
@@ -41,6 +42,7 @@ type Boy struct {
 	engotil.GCollisionComponent
 	ControlComponent
 	ss *common.Spritesheet
+	*ScoreComponent
 }
 
 func NewBoy(x, y, w float32, pnum int) *Boy {
@@ -61,8 +63,8 @@ func NewBoy(x, y, w float32, pnum int) *Boy {
 		ControlComponent: GetKeys(pnum),
 		GCollisionComponent: engotil.GCollisionComponent{
 			Extra: engo.Point{-10, -10},
-			Group: C_BALL,
-			Main:  C_BOY,
+			Main:  C_BOY_SOLID | C_MOVING_SOLID | C_BOY_HURT,
+			Group: C_MOVING_SOLID,
 		},
 		ss: ss,
 	}
@@ -101,7 +103,7 @@ func NewBall(x, y, w float32, pnum int) *Ball {
 		},
 		GCollisionComponent: engotil.GCollisionComponent{
 			Extra: engo.Point{0, 0},
-			Main:  C_BALL,
+			Main:  C_BALL_HIT | C_MOVING_SOLID,
 			Group: 0,
 		},
 	}

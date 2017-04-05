@@ -42,11 +42,11 @@ func LoadMap(fname string, sl SysList) *common.Level {
 				}
 				sl.RenderSys.AddByInterface(tile)
 				if tLayer.Name == "sea" {
-					tile.Group = C_BOY
+					tile.Group = C_BOY_SOLID
 					sl.CollisionSys.Add(tile)
 				}
 				if tLayer.Name == "ground" {
-					tile.Group = C_BOY | C_BALL | C_ENEMY
+					tile.Group = C_BOY_SOLID | C_MOVING_SOLID
 					sl.CollisionSys.Add(tile)
 				}
 			}
